@@ -32,7 +32,7 @@ describe('Page model', function() {
       Page.create({
           title: 'food bar',
           content: 'food bar',
-          tags: ['bar']
+          tags: ['bar', 'baz']
       });
       Page.create({
           title: 'bar',
@@ -85,7 +85,7 @@ describe('Page model', function() {
 
     describe('Methods', function() {
         describe('findSimilar', function() {
-            it('should never get itself', function(done) {
+            xit('should never get itself', function(done) {
               Page.findOne({ title: "food bar"})
               .then(function(page){
                   page.findSimilar()
@@ -98,19 +98,55 @@ describe('Page model', function() {
               .then(null, done);
 
             });
-            xit('should get other pages with any common tags', function() {});
-            xit('should  not get other pages without any common tags', function() {});
+            xit('should get other pages with any common tags', function(done) {
+              Page.findOne({ title: "food bar"})
+              .then(function(page){
+                  page.findSimilar()
+                  .then(function(simPages){
+                    assert.equal(simPages.length, 1);
+                    done();
+                  })
+                  .then(null, done);
+              })
+              .then(null, done);
+
+            });
+            xit('should  not get other pages without any common tags', function(done) {
+              Page.findOne({ title: "food bar"})
+              .then(function(page){
+                  page.findSimilar()
+                  .then(function(simPages){
+                    assert.equal(simPages.length, 1);
+                    done();
+                  })
+              })
+              .then(null, done);
+
+            });
         });
     });
 
     describe('Virtuals', function() {
         describe('route', function() {
-            xit('should return the url_name prepended by "/wiki/"', function() {});
+            xit('should return the url_name prepended by "/wiki/"', function(done) {
+              Page.findOne({ title : "food bar"})
+                .then(function(page){
+                  assert.equal(page.route, "/wiki/food_bar")
+                  done()
+                }).then(null, done);
+            })
         });
     });
 
     describe('Hooks', function() {
-        xit('should set urlTitle based on title before validating', function() {});
+        it('should set urlTitle based on title before validating', function(done) {
+          Page.findOne({ title : "food bar"})
+            .then(function(page){
+              assert.equal(page.urlTitle, "food_bar")
+              done()
+            }).then(null, done)
+
+        });
     });
 
 });
